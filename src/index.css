@@ -11,7 +11,7 @@ body {
 /* Style inspiré de la doc Node.js : sobre, lisible, focus sur le contenu */
 
 .mdx-content {
-  @apply text-slate-700 leading-[1.7] font-sans;
+  @apply text-slate-700 leading-[1.7];
   font-size: 14px;
   /* max-width: 800px; */
   /* margin: 0 auto; */
@@ -192,7 +192,7 @@ body {
 
 /* Code inline élégant */
 .mdx-content code {
-  @apply bg-slate-100 text-slate-800 px-2 py-1 rounded-md text-[14px] font-mono;
+  @apply bg-slate-100 text-slate-800 px-2 py-1 rounded-md text-[14px];
   border: 1px solid #e2e8f0;
   font-weight: 500;
   font-size: 0.8125rem;
@@ -206,7 +206,7 @@ body {
 
 /* Blocs de code modernes */
 .mdx-content pre {
-  @apply bg-slate-900 text-slate-100 p-6 rounded-xl overflow-x-auto text-[14px] font-mono mb-8;
+  @apply bg-slate-900 text-slate-100 p-6 rounded-xl overflow-x-auto text-[14px] mb-8;
   border: 1px solid #334155;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   font-size: 0.8125rem;
