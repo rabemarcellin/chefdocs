@@ -1,0 +1,187 @@
+import FolderTree from "../../ui/FolderTree"
+import { completionConcerns, concernedFolderAndFiles, viewConcerns, promptConcerns } from "./data"
+import UserPromptForm from "../path/UserPromptForm"
+import MessageSlice from "../path/MessageSlice"
+
+# Prompting
+
+Le `Prompting` ici est tout ce qui concerne la configuration de notre prompt,
+
+- de la formulation de notre réquete(question ou demande) dans le formulaire d'input
+- de choisir quel agent utilisé
+- c'est nous qui decidons des sources auquel l'agent va se basé pour nous répondre selon ce qu'on peut utiliser: `document`, `internet`, ou les deux en même temps.
+- Le choix de la conversation n'est plus à dire, car il faut choisir en juste une.
+
+---
+### La formulation de la réquete
+Principalement, on va faire tout cela dans le fichier `UserPromptForm.tsx` pour la formulation de la réquete et son envoi au backend.
+<FolderTree
+  data={UserPromptForm}
+/>
+
+Ce qu'on doit faire en gros, c'est de envoyer notre prompt au serveur, juste cela. Avec certaine paramètre certes, 
+comme la discussion qu'on a séléctionné, l'agent qu'on a séléctionné pour répondre, utiliser les `documents`ou non. 
+
+Mais dans la forme la plus basique on fait juste une appel api au serveur, et on leur passe en paramètres notre prompt. Haha
+
+Rien de plus normale qu'un envoi de question au serveur via un appel api.
+
+Et de récevoir la réponse de celle-ci en response.
+
+--- 
+
+<div className="tip">
+Mais il faut qu'on s'assure qu'on a une discussion d'abord, car les questions et les réponses sont censés être stockés dans une discussion.
+**C'est pour cela qu'au premier lettre écrit dans la formulaire input, on créer tout de suite une discussion une discussion pour stocker tout ce qui va se passer en suite.**
+</div>
+
+### Côté code 
+
+Les discussions(conversations) sont stockés dans le state redux ```state.conversation.items```et la conversation active dans ```state.conversation.active```
+que l'on récupere par les selectors ```selectConversationItems``` et ```selectConversationActive```
+
+```tsx
+// path: src/store/features/conversationSlice/selector.ts
+
+const selectConversationItems = (state: RootState) => state.conversation.items;
+const selectConversationActive = (state: RootState) => state.conversation.active;
+```
+
+Donc on vérifie dans la collection ou le projet si ce collection ou ce projet a au moins une discussion et que s'il n'en a pas, alors que 
+l'utilisateur est entrain d'écrire alors il faut vite lui en créer une automatiquement.
+
+Une fois l'utilisateur arrive à formuler ce qu'il/elle veut demander.
+
+- On enregistre son message dans la pile de message(dans le state)
+- On envoie son prompt au serveur
+
+--- 
+
+### Le state des messages
+
+Le state qui gère les messages le `messageSlice`
+
+<FolderTree
+  data={MessageSlice}
+/>
+
+Ce state a une action `addMessageAction` qui permet d'ajouter un message dans la pile de message(dans le state)
+que ce soit le message de l'utilisateur ou bien la réponse de l'agent, ou bien même le message d'erreur.
+C'est le seule action qu'on utilise. Les messages sont ensuite stockés dans `state.message.items` récuperable via
+le selector `conversationMessageSelector` pour les messages d'une conversation spécifique.
+
+```tsx
+
+// Récuperation des messages d'une discussion spécifique
+const conversationId = "id de la discussion";
+const conversationMessages = useAppSelector(conversationMessageSelector(conversationId));
+
+
+// Ajout d'un message dans le state
+const dispatch = useAppDispatch();
+
+// Exemple de state d'un message d'un utilisateur
+const message = {
+    content: "Le texte écrit dans l'input",
+    type: "prompt de l'utilisateur ou réponse de l'IA",
+    name: getAgentName(agent) === "" ? myAuxName : getAgentName(agent),
+    id: "...",
+    createdAt: "...",
+    conversationId: "id de la discussion",
+    agentChanged: false,
+    filesURL: "l'url d'un image si on veut envoyer une image",
+    myAuxId: "l'id de myAux", // à remplir si l'agent est un myAux
+    author: "Le nom de la personne qui a écrit le message"
+}
+
+dispatch(addMessageAction(message));
+
+```
+
+On en passe beaucoup de chose mais l'essentiel c'est qu'on enregistre:
+- la question de telle utilisateur de telle nom
+- dans telle discussion
+- une question qu'il/elle a posé à telle agent
+- avec telle image
+- à telle moment
+
+
+Ou bien
+- une réponse de telle agent
+- dans telle discussion
+
+---
+
+Après avoir enregistrer la question/ ou la demande de l'utilisateur dans le state. On envoie maintenant le prompt dans 
+le serveur et le tour est joué. Haha 
+
+Comme on a dit, c'est juste un appel api. Donc la fonction se trouve dans le dossier service `src/services/api`
+Tu trouveras une fichier `chat.ts` dans ce dossier où j'ai créer la fonction `askAgentService`qui fait le tout.
+
+```tsx
+// path: src/services/api/chat.ts
+
+export const askAgentService = async (
+  agent: AgentType,
+  body: FormData
+): Promise<StreamResponse> => {
+  const token = Cookies.get("user");
+  const uri = getAgentUrl(agent);
+  const secureHeaders = {
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
+  const response = await fetch(`${API_BASE_URL}/chat${uri}`, {
+    method: "POST",
+    headers: {
+      ...secureHeaders,
+    },
+    body: body,
+  });
+  if (!response.ok) {
+    return {
+      status: "error",
+      data: await response.json(),
+    };
+  }
+
+  const reader = response.body?.getReader();
+
+  if (!reader) {
+    throw new Error("No reader found");
+  }
+
+  return {
+    status: "success",
+    data: reader,
+  };
+};
+```
+
+Le chose important à tenir ici c'est qu'on envoie pas une requête api de type POST régulier, on l'envoie en type `octect/stream`.
+En fait le truc, c'est de dire au serveur de pouvoir récupérer la réponse de ma question petit à petit.
+Pour cela il faut envoyer la requête en type `octect/stream`. 
+c'est comme envoyer une requête en `mulitpart/form-data` mais ici c'est en `octect/stream`.
+
+<div className="tip">
+  `multipart/form-data` c'est pour l'envoie de fichier.
+
+  `octect/stream` c'est pour récuperation de la réponse en streaming(petit à petit), comme la progression des films sur les sites de streaming en fait.
+  c'est pas récuperer en une seule fois mais bout à bout.
+</div>
+
+---
+
+Une fois que c'est fait, on attend juste la réponse en fait 👉​👈​
+
+<div class="note">
+N.B: Le format de gestion des réquetes des octect/stream est déjà comme je l'ai écrit en haut lesy. Tu peux en faire des recherches sur cela car ça va pas du tout changer
+en quoi que ce soit dans les tuto 😅 Mais peut-être que eux pourront bien expliquer mieux que moi.
+</div>
+
+
+
+
+
+
+
+

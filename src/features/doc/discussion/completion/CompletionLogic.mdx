@@ -1,0 +1,226 @@
+import FolderTree from "../../ui/FolderTree"
+import { completionConcerns, concernedFolderAndFiles, viewConcerns, promptConcerns } from "./data"
+
+### Récuperer la réponse de l'api au serveur
+La phase de la completion se joue uniquement pendant que l'agent est entrain de répondre seulement.
+c'est-à-dire cette phase en cours où l'agent répond petit à petit.
+**Une fois que l'agent à finit de répondre, la completion est fini**. et on stocke après toute le bout de phrase de l'agent combinés dans le state.
+
+La gestion de la completion déjà énormement du la réponse de l'api appel api de notre question de la [section précédente](/discussion/prompting/).
+
+Car, on fait, la récupération petit à petit de la réponse, et l'affichage des réponses petit à petit aussi, c'est ça en fait la completion.
+
+---
+
+La gestion de la completion côté front est fait par le state `agentSlice`
+
+> Pourquoi ? **car c'est l'agent qui est en charge de la réponse, toute réponse vient de lui**.
+
+
+1 - On envoie la requête, une fois que l'agent réponse, on créer un stream via l'action `createStreamAction`
+<div className="tip">
+Un stream, on va dire que c'est une sorte de session pendant laquelle passe tout la réponse de l'agent pour telle question.
+
+Si on pose 2 questions, à un même agent, l'agent va créer 2 streams différents ou il va répondre petit à petit à la question.
+
+C'est un système imaginaire que j'ai mis en place coté front, pour gérer la completion. en fait. J'explique juste.
+c'est une sorte de canal je pense, auquel sont l'agent envoie petit à petit sa réponse pour telle question à telle discussion.
+Et le stream arrange les phrases et les stocke temporairement.
+</div>
+
+2 - À chaque fois que l'agent répond, on met aussi à jour notre pile de réponse dans le stream, via l'action `updateStreamContentAction`
+
+
+3 - Et une fois que l'agent à fini de répondre, on assemble les messages au complet, on ajoute la toute nouvelle message au complet dans le state des messages.
+On supprime ce canal de stream car toute la réponse a été récuperer via l'action `cancelStreamAction` 
+
+<div class="note">
+Ceci va être parler dans la section suivante, mais le state qui stocke chaque completion(chaque réponse) se trouve dans `state.agent.completions`. 
+Car oui, notre système de chat et notre state redux par conséquent :) prend en charge la gestion de plusieurs réponses dans plusieurs discussions en instantané.
+
+Chaque completion, réponse non complète et récuperer petit à petit, est stocké dans le state `state.agent.completions`.
+
+</div>
+
+
+Côté code
+
+```tsx
+  // Dans UserPromptForm.tsx
+
+  ...
+
+  const dispatch = useAppDispatch();
+
+  const { status, data } = await askAgentService(appAgent, payload());
+      if (status === "error") {
+        const error = data;
+        const errorMessage = handleAskAgentError(error);
+        const fullErrorMessage = builderChatErrorMessage(
+          TranslationApp,
+          errorMessage
+        );
+        // afficher une erreur et annuler la completion si il y a erreur lors de récupération du réponse de l'agent
+        dispatch(
+          addMessageAction({
+            content: fullErrorMessage,
+            type: MessageType.Error,
+            name: getAgentName(agent) === "" ? myAuxName : getAgentName(agent),
+            id: uuidv4(),
+            createdAt: new Date(),
+            conversationId: conversationId,
+            agentChanged: false,
+            filesURL: images,
+            myAuxId: activeMyaux ? activeMyaux.id : "",
+            author:
+              user && JSON.parse(user)
+                ? JSON.parse(user)[0].f_Name + " " + JSON.parse(user)[0].l_Name
+                : "",
+          })
+        );
+      }
+      const reader = data;
+      let completion = "";
+      let firstCompletion = false;
+      const decoder = new TextDecoder("utf-8");
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          // end stream
+          dispatch(
+            cancelStreamAction({
+              conversationId: conversationId,
+              agent: appAgent,
+            })
+          );
+          const textMessage = completion.split("data:");
+          const createdTime = extractTimestamp(
+            textMessage[textMessage.length - 1]
+          );
+          dispatch(
+            addMessageAction({
+              content: queryReverter(
+                urlCollectionTabs,
+                formatMessageAI(completion).query
+              ),
+              type: MessageType.AI,
+              name:
+                getAgentName(appAgent) === ""
+                  ? myAuxName
+                  : getAgentName(appAgent),
+              id: uuidv4(),
+              createdAt:
+                createdTime !== null ? new Date(createdTime) : new Date(),
+              conversationId: conversationId,
+              agentChanged:
+                lastMessage?.name !==
+                (getAgentName(appAgent) === ""
+                  ? myAuxName
+                  : getAgentName(appAgent)),
+              filesURL: [],
+              myAuxId: activeMyaux ? activeMyaux.id : "",
+              // Vide oooooo
+              author:
+                user && JSON.parse(user)
+                  ? JSON.parse(user)[0].f_Name + " " + JSON.parse(user)[0].l_Name
+                  : "",
+            })
+          );
+          firstCompletion = false;
+          setIsStartCompletion(firstCompletion);
+          setIsNewConversationAliasSet(true);
+          break;
+          return;
+        }
+        // info: L'activeAgentCompletion est met lent à se mettre à jour,
+        // donc on va tracker la creation de la completion et le mise à jour de la completion
+        // par des variables locales
+
+        const chunk = decoder.decode(value, { stream: true });
+
+        completion += chunk;
+
+        if (firstCompletion === false) {
+          firstCompletion = true;
+          dispatch(
+            createStreamAction({
+              conversationId: conversationId,
+              agent: appAgent,
+              content: completion,
+            })
+          );
+        } else {
+          dispatch(
+            updateStreamContentAction({
+              conversationId: conversationId,
+              agent: appAgent,
+              content: completion,
+            })
+          );
+        }
+      }
+
+```
+
+---
+
+c'est pour cela qu'on a cette genre de code pour la façon dont on fait **l'affichage de le completion sur le page web** dans `ChatMessage.tsx`
+
+### Affichage de la completion sur le page web
+
+```tsx
+...
+  return (
+      <div className="m-chat-scroller scroll-chat">
+        {isLoading ? (
+          <ChatSkeleton />
+        ) : (
+          <>
+            {messageItems.map((m, index) => {
+              switch (m.type) {
+                case "human":
+                  return <UserMessage key={index} content={m.content} files={m.filesURL} author={m.author} createdAt={m.createdAt}/>;
+                case MessageType.Error:
+                  return <ErrorMessage key={index} message={m} />;
+                default:
+                  return <AIMessage key={index} message={m} />;
+              }
+            })}
+
+            {activeAgentCompletion &&
+              (formatMessageAI(activeAgentCompletion.content)
+                .query.replace(/<ignore>/g, "")
+                .trim() !== "" ? (
+                <CompletionMessage
+                  conversationId={conversationId}
+                  completionAI={queryReverter(
+                    urlCollectionTabs,
+                    activeAgentCompletion.content
+                  )}
+                  isCompletion={isStartCompletion}
+                  setIsBotLoading={setIsBotLoading}
+                />
+              ) : (
+                <LoadingText text={getAgentName(appAgent) === "" ? myAuxName : getAgentName(appAgent)} />
+              ))}
+          </>
+        )}
+      </div>
+  );
+```
+
+> Les messages d'abord, tout en bas des messages le completion temporaire d'une nouvelle réponse.
+
+
+
+De rien lesy 😊
+
+
+
+
+
+
+
+

@@ -1,0 +1,144 @@
+
+# Quels sont les choses concernés techniquement lorsqu'on parle d'une discussion ?
+
+
+### Completion
+Il y a un fonctionnalité important dans une discussion, `La completion`
+
+Tu vois quand tu envoie ta question, et que pendant que l'agent reflechisse sur la façon de comment il va
+te répondre, et que après il te répond, mais petit à petit.
+**C'est cela qu'on appelle `Completion`**, c'est cette façon d'être répondu petit à petit par l'agent. Moi je dis
+qu'on est en mode `Completion` à ce moment là haha.
+
+<div class="note">
+⚠️ **Note :** L'utilisateur peut avoir le choix de stoper la completion à tout moment pendant encore que l'agent ne finisse pas de répondre completement.
+La réponse sera enregistréer seulement jusqu'au partie coupé.
+</div>
+
+---
+
+### Agent
+Après, on va parler d'`agent`
+
+L'`agent` c'est l'IA qui va répondre à ta question. Un `agent` peut être vu comme un assistant qui 
+tente à comprendre ce que tu veux dire dans ta question, et à te répondre en fonction de ce que tu as dit.
+Il a sa propre caractéristique, ce dont dans quoi il est fort, ou dans quoi il ne sait pas trop maitrisé.
+Chaque agent a sa spécialité et son domaine d'expertise.
+
+[myAuxilium](https://myauxilium.ai) a des agents par défaut comme tu le sais déjà:
+
+`ChatExpert`  `ChatMentor` `ChatSocial` `ChatWriter` 
+
+`DeepSearch`(Prochainement)
+
+
+<div class="note">
+**Et les myAux alors ???**
+</div>
+
+**"Les"** on a dit, donc plusieurs. 
+
+> Mais plusieurs quoi ? 
+> Plusieurs agents haha.
+
+Les `ChatExpert`, `ChatMentor`, `ChatSocial`, `ChatWriter` sont des agents déjà disponible dans le site, ils ont leur personnalité
+et leur point fort, domaine d'expertise comme on a dit.
+Mais tu peux créer les tiennes aussi, et les personnaliser et leur rendre fort et expert dans quelque chose d'autre par exemple.
+
+Une agent mâitre dans la création de musique, un autre agent irréprochable dans le math, un autre très fort dans les histoires anciennes,
+un autre dans la domaine de la cosmologie, etc etc. Tous des agents qui sont utiles et maitrise une chose spécifique.
+
+Et on a prevu juste des les appelés tous des `myAux` en fait, chaque agent sont tous des `myAux` peut importe son nom.
+
+<div class="note">
+⚠️ **Note :** Les myAux ont une chose particulière qu'on appelle leur `temperature`
+
+C'est seulement pour les `ChatExpert` - `ChatMentor` que tu ne peux pas changer leur `temperature`.
+
+Mais tout les agents dans [myAuxilium](https://myauxilium.ai) ont leur propre `temperature` qui est paramètrable.
+
+Leur `temperature`en fait c'est juste le comportement qu'elle va adopter pour te répondre.
+
+- **Mode Créatif**, soit les agents vont être un peu plus `créatif` dans la façon dont il va te répondre, et peut-être même un peu plus `créatif` dans les documents dont il va se baser.
+- **Mode rigueur**, à peu près l'opposé d'être créatif, l'agent va bien verifié la fiabilité de ce qu'il va te répondre à la moindre détail.
+- **Mode neutre**, ou bien il va juste se comporter normalement.
+
+
+
+
+
+
+
+</div>
+---
+
+### Messages
+Après il y a l'historique de la discussions. Les `messages`. 
+
+Tout ce qui est de plus évident, pour cette section.
+
+Ce sont les messages que tu envoies et les réponses à chaque, dans la discussion de ton choix.
+
+--- 
+
+### Nom de discussion (alias)
+Et puisqu'on en parle de `discussion`, les discussions ont des `alias`
+
+c'st-à-dire des noms ou des titres.
+
+<div class="note">
+⚠️ **Attention :** je parle **"des"** discussion, chaque discussion ont leur propre nom chacune.
+</div>
+
+Quand tu créer une discussion, elle n'a pas tout de suite un nom en fait. C'est-à-dire qu'une 
+nouvelle discussion n'a pas de nom à la base. On l'appelle juste `Nouvelle Discussion` jusqu'à ce qu'elle soit renommée.
+
+Tu peux renommer une discussion à tout moment, mais elle est rénommé automatiquement à ta première réponse venant de l'agent. 
+c'est-à-dire selon le contexte de ta question. Mais tu peux toujours la rénommer comme tu veux après.
+
+---
+<div class="tip">
+Mais puisque les discussions dans [myAuxilium](https://myauxilium.ai) peut se referér à plusieurs documents d' une `collection`ou d' `un projet`.
+Il y a la fonctionnalité de **choix de source**: les sources auquel l'agent va se baser. c'est-à-dire que l'agent va se reférer à des documents spéficique du collection de la discussion, ou bien 
+que le l'agent va puiser ses informations sur internet, etc.
+</div>
+
+### Choix de source
+
+3 choixs s'offre à l'utilisateur:
+- Soit il utilise les `documents` que peuvent contenir la collection/le projet de la discussion.
+- Soit il utilise seulement  `internet`(*N.B: seul option des collections qui n'ont pas de documents*)
+- Soit il utilise les utilise ensemble: `documents` et `internet`.
+
+
+
+
+<div class="note">
+**Voilà en gros 😗** 
+
+Beaucoup chose entre en jeu, 
+- la `completion`
+- les `agents`
+- les `choix de source`
+
+et beaucoup de paramètres aussi comme les `temperature` des agents, les `documents`
+
+Mais la base c'est que c'est juste un discussion avec des historique de messages, et d'agents dedans.
+
+Mais il y a des paramètres sur lesquels on ne s'etait pas attardé mais qu'on peut faire dans une discussion:
+- l'upload d'image pour appuyer notre prompt(envoyer le prompt avec une image)
+- le `copy/paste` des réponses des agents
+- une autre aussi, l'horotage du changement d'agent dans la discussion, une chose qu'on va en parler plus en detail plus tard dans la partie code.
+c'est-à-dire qu'on tient une historique du date et de l'heure ou telle utilisateur a changé de `ChatExpert` à `ChatMentor` par exemple dans la même discussion.
+- partager des discussions entre les membres d'une même organisation ou équipe mais ceci sort déjà du contexte de ce qu'on veut
+expliquer ici, c'est-à-dire la discussion elle-même entre l'utilisateur et l'agent.
+
+</div>
+
+
+
+
+
+
+
+

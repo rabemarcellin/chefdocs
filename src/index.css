@@ -1,0 +1,209 @@
+@import "tailwindcss";
+
+body {
+  font-family: "Mozilla Text", sans-serif;
+}
+
+.font-code {
+  font-family: "Ubuntu", sans-serif;
+}
+
+/* Style inspiré de la doc Node.js : sobre, lisible, focus sur le contenu */
+
+.mdx-content {
+  @apply text-slate-700 text-[15px] leading-[1.7];
+  /* max-width: 800px; */
+  /* margin: 0 auto; */
+  padding: 3rem 2rem 5rem 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Titres modernes */
+.mdx-content h1 {
+  @apply text-3xl font-bold mt-8 mb-6 leading-tight;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.mdx-content h1::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 2px;
+}
+
+.mdx-content h2 {
+  @apply text-xl font-semibold mt-8 mb-4 leading-snug;
+  color: #1e293b;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.mdx-content h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 2px;
+}
+
+.mdx-content h3 {
+  @apply text-lg font-medium mt-6 mb-3;
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+/* Paragraphes élégants */
+.mdx-content p {
+  @apply mb-6;
+  color: #475569;
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* Liens animés */
+.mdx-content a {
+  @apply text-blue-600 font-medium transition-all duration-200;
+  text-decoration: none;
+  position: relative;
+}
+
+.mdx-content a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  transition: width 0.3s ease;
+  border-radius: 1px;
+}
+
+.mdx-content a:hover::after {
+  width: 100%;
+}
+
+.mdx-content a:hover {
+  @apply text-blue-700;
+}
+
+/* Listes stylisées */
+.mdx-content ul {
+  @apply list-none pl-0 mb-6 space-y-2;
+}
+
+.mdx-content ul li {
+  @apply leading-relaxed pl-6 relative;
+  color: #475569;
+}
+
+.mdx-content ul li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #3b82f6;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.mdx-content ol {
+  @apply list-decimal pl-6 mb-6 space-y-2;
+  color: #475569;
+}
+
+.mdx-content ol li {
+  @apply leading-relaxed;
+}
+
+/* Citations modernes */
+.mdx-content blockquote {
+  @apply border-l-4 pl-6 py-4 my-8 rounded-r-lg;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  border-left: 4px solid #3b82f6;
+  font-style: italic;
+  color: #475569;
+  font-size: 1.05em;
+}
+
+/* Code inline élégant */
+.mdx-content code {
+  @apply bg-slate-100 text-slate-800 px-2 py-1 rounded-md text-[14px] font-mono;
+  border: 1px solid #e2e8f0;
+  font-weight: 500;
+}
+
+/* Blocs de code modernes */
+.mdx-content pre {
+  @apply bg-slate-900 text-slate-100 p-6 rounded-xl overflow-x-auto text-[14px] font-mono mb-8;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.mdx-content pre code {
+  @apply bg-transparent text-inherit px-0 py-0 rounded-none border-0;
+}
+
+/* Images avec style */
+.mdx-content img {
+  @apply rounded-xl shadow-lg my-8 w-full;
+  object-fit: contain;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+/* Tableaux modernes */
+.mdx-content table {
+  @apply border-collapse w-full my-8 text-sm rounded-xl overflow-hidden;
+  background: #fff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.mdx-content th {
+  @apply bg-slate-50 font-semibold border-b border-slate-200 px-4 py-3 text-left;
+  color: #1e293b;
+}
+
+.mdx-content td {
+  @apply border-b border-slate-100 px-4 py-3;
+  color: #475569;
+}
+
+/* Séparateurs élégants */
+.mdx-content hr {
+  @apply border-slate-200 my-12;
+  border-width: 1px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+}
+
+/* Notes et tips */
+.mdx-content .note {
+  @apply bg-amber-50 border-l-4 border-amber-400 text-amber-900 px-6 py-4 rounded-r-lg my-8;
+  font-size: 0.95em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.mdx-content .tip {
+  @apply bg-emerald-50 border-l-4 border-emerald-400 text-emerald-900 px-6 py-4 rounded-r-lg my-8;
+  font-size: 0.95em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}

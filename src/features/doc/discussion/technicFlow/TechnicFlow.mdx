@@ -1,0 +1,30 @@
+import AgentStartHistoryView from "./assets/img/changement_d_agent.png"
+
+# Qu'est ce qui se passe lors d'une discussion techniquement ?
+
+### Prompt
+L'utilisateur entre dans une projet ou une collection, puis l'utilisateur peut créer une nouvelle discussion ou choisit de consulter une discussion déjà existante.
+On va dire que l'utilisateur a choisi de créer une nouvelle discussion. La discussion est n'a donc pas encore de nom. Il/Elle fait son prompt, choisit un agent spécifique ou 
+le laisse avec l'agent par défaut(`ChatExpert` je pense pour les dicussions dans `discuter`).
+
+Choisie d'ajout les documents comme source auquel les agents vont se baser pour cette réponse, ou pas. ou active internet aussi.
+Peut-être même qu'il/elle va upload un image et l'envoyé au serveur avec son prompt.
+
+
+### Réponse 
+
+L'agent va donc recevoir le prompt, puis la completion va commencer petit à petit jusqu'à ce qu'il(l'agent) va donner un réponse complète. Et que leur messages s'emplilent et sont stockés dans la base de données.
+
+<div class="tip">
+Si l'utilisateur commence à utiliser un d'agent, il va avoir une vue sur l'horotage de l'utilisation de cette agent dans la discussion
+<img src={AgentStartHistoryView} alt="Vue sur l'hor" />
+</div>
+
+
+
+
+
+
+
+
+
