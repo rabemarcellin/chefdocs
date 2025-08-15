@@ -11,7 +11,8 @@ body {
 /* Style inspiré de la doc Node.js : sobre, lisible, focus sur le contenu */
 
 .mdx-content {
-  @apply text-slate-700 text-[15px] leading-[1.7];
+  @apply text-slate-700 leading-[1.7] font-sans;
+  font-size: 14px;
   /* max-width: 800px; */
   /* margin: 0 auto; */
   padding: 3rem 2rem 5rem 2rem;
@@ -24,6 +25,12 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+@media (min-width: 768px) {
+  .mdx-content {
+    font-size: 16px;
+  }
+}
+
 /* Titres modernes */
 .mdx-content h1 {
   @apply text-3xl font-bold mt-8 mb-6 leading-tight;
@@ -32,6 +39,13 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   position: relative;
+  font-size: 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content h1 {
+    font-size: 2.25rem;
+  }
 }
 
 .mdx-content h1::after {
@@ -50,6 +64,13 @@ body {
   color: #1e293b;
   position: relative;
   padding-left: 1rem;
+  font-size: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content h2 {
+    font-size: 1.75rem;
+  }
 }
 
 .mdx-content h2::before {
@@ -68,6 +89,13 @@ body {
   @apply text-lg font-medium mt-6 mb-3;
   color: #3b82f6;
   font-weight: 600;
+  font-size: 1.125rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content h3 {
+    font-size: 1.375rem;
+  }
 }
 
 /* Paragraphes élégants */
@@ -75,7 +103,13 @@ body {
   @apply mb-6;
   color: #475569;
   line-height: 1.7;
-  font-size: 15px;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content p {
+    font-size: 1rem;
+  }
 }
 
 /* Liens animés */
@@ -108,6 +142,13 @@ body {
 /* Listes stylisées */
 .mdx-content ul {
   @apply list-none pl-0 mb-6 space-y-2;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content ul, .mdx-content ol {
+    font-size: 1rem;
+  }
 }
 
 .mdx-content ul li {
@@ -140,7 +181,13 @@ body {
   border-left: 4px solid #3b82f6;
   font-style: italic;
   color: #475569;
-  font-size: 1.05em;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content blockquote {
+    font-size: 1rem;
+  }
 }
 
 /* Code inline élégant */
@@ -148,6 +195,13 @@ body {
   @apply bg-slate-100 text-slate-800 px-2 py-1 rounded-md text-[14px] font-mono;
   border: 1px solid #e2e8f0;
   font-weight: 500;
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content code {
+    font-size: 0.9375rem;
+  }
 }
 
 /* Blocs de code modernes */
@@ -155,6 +209,13 @@ body {
   @apply bg-slate-900 text-slate-100 p-6 rounded-xl overflow-x-auto text-[14px] font-mono mb-8;
   border: 1px solid #334155;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content pre {
+    font-size: 0.9375rem;
+  }
 }
 
 .mdx-content pre code {
@@ -175,6 +236,13 @@ body {
   background: #fff;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 768px) {
+  .mdx-content table {
+    font-size: 0.9375rem;
+  }
 }
 
 .mdx-content th {
@@ -198,12 +266,18 @@ body {
 /* Notes et tips */
 .mdx-content .note {
   @apply bg-amber-50 border-l-4 border-amber-400 text-amber-900 px-6 py-4 rounded-r-lg my-8;
-  font-size: 0.95em;
+  font-size: 0.8125rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 768px) {
+  .mdx-content .note, .mdx-content .tip {
+    font-size: 0.9375rem;
+  }
 }
 
 .mdx-content .tip {
   @apply bg-emerald-50 border-l-4 border-emerald-400 text-emerald-900 px-6 py-4 rounded-r-lg my-8;
-  font-size: 0.95em;
+  font-size: 0.8125rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }

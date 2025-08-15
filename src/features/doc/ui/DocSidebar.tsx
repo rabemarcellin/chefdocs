@@ -3,7 +3,7 @@ import discussionTopics from "../discussion/topics";
 
 const DocSidebar = () => {
   return (
-    <div className="w-64 flex-none bg-white/95 backdrop-blur-sm h-full rounded-xl shadow-lg border border-white/20">
+    <div className="w-64 flex-none bg-white/95 backdrop-blur-sm h-full rounded-xl shadow-lg border border-white/20 hidden md:block">
       <div className="flex flex-col h-full overflow-hidden">
         <h3 className="font-semibold text-lg text-slate-800 pb-2 border-b border-slate-200 p-4">
           Discussion
