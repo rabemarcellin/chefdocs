@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router';
 import { ReactSVG } from 'react-svg';
 import { NEXT_ICON, PREV_ICON } from '../../../constants/image';

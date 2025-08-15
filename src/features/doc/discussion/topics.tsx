@@ -6,7 +6,7 @@ import CodelineFlow from "./codelineFlow/CodelineFlow.mdx";
 import DiscussionConcerns from "./concerns/DiscussionConcerns.mdx";
 import Prompting from "./prompting/Prompting.mdx";
 import CompletionLogic from "./completion/CompletionLogic.mdx";
-import MessagesView from "./messagesView/MessagesView.mdx";
+// import MessagesView from "./messagesView/MessagesView.mdx";
 import {
   introductionTitle,
   introductionPath,
@@ -22,8 +22,8 @@ import {
   promptingPath,
   completionTitle,
   completionPath,
-  viewTitle,
-  viewPath,
+  // viewTitle,
+  // viewPath,
 } from "./text";
 
 export default [
