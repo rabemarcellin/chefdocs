@@ -28,7 +28,7 @@ const DocSidebarDropdown = () => {
           )}
           {isOpen && (
             <ul className="space-y-2 flex-auto overflow-auto">
-              {discussionTopics.map((topic) => (
+              {discussionTopics.filter((topic) => activeTopic ? activeTopic.to !== topic.to : true).map((topic) => (
                 <li key={topic.key}>
                   <NavLink
                     to={topic.to}
