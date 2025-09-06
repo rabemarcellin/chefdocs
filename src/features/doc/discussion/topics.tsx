@@ -6,6 +6,10 @@ import CodelineFlow from "./codelineFlow/CodelineFlow.mdx";
 import DiscussionConcerns from "./concerns/DiscussionConcerns.mdx";
 import Prompting from "./prompting/Prompting.mdx";
 import CompletionLogic from "./completion/CompletionLogic.mdx";
+import ChatCompletion from "./chatCompletion/ChatCompletion.mdx";
+import SSE from "./sse/SSE.mdx";
+import EventStream from "./eventStream/EventStream.mdx";
+import EventSource from "./eventSource/EventSource.mdx";
 // import MessagesView from "./messagesView/MessagesView.mdx";
 import {
   introductionTitle,
@@ -22,6 +26,14 @@ import {
   promptingPath,
   completionTitle,
   completionPath,
+  chatCompletionTitle,
+  chatCompletionPath,
+  sseTitle,
+  ssePath,
+  eventStreamTitle,
+  eventStreamPath,
+  eventSourceTitle,
+  eventSourcePath,
   // viewTitle,
   // viewPath,
 } from "./text";
@@ -63,16 +75,46 @@ export default [
     to: technicFlowPath,
     prev: flowPath,
     prevTitle: flowTitle,
+    next: ssePath,
+    nextTitle: sseTitle,
+    element: <TechnicFlow />,
+  },
+  {
+    key: "topic-discussion-sse",
+    title: sseTitle,
+    to: ssePath,
+    prev: technicFlowPath,
+    prevTitle: technicFlowTitle,
+    next: eventStreamPath,
+    nextTitle: eventStreamTitle,
+    element: <SSE />,
+  },
+  {
+    key: "topic-discussion-event-stream",
+    title: eventStreamTitle,
+    to: eventStreamPath,
+    prev: ssePath,
+    prevTitle: sseTitle,
+    next: chatCompletionPath,
+    nextTitle: chatCompletionTitle,
+    element: <EventStream />,
+  },
+  {
+    key: "topic-discussion-event-source",
+    title: eventSourceTitle,
+    to: eventSourcePath,
+    prev: eventStreamPath,
+    prevTitle: eventStreamTitle,
     next: codelineFlowPath,
     nextTitle: codelineFlowTitle,
-    element: <TechnicFlow />,
+    element: <EventSource />,
   },
   {
     key: "topic-discussion-codeline-flow",
     title: codelineFlowTitle,
     to: codelineFlowPath,
-    prev: technicFlowPath,
-    prevTitle: technicFlowTitle,
+    prev: chatCompletionPath,
+    prevTitle: chatCompletionTitle,
     next: promptingPath,
     nextTitle: promptingTitle,
     element: <CodelineFlow />,

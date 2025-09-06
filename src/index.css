@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 body {
-  font-family: "Mozilla Text", sans-serif;
+  font-family: "TASA Explorer","Open Sans","Mozilla Text", sans-serif;
 }
 
 .font-code {
-  font-family: "Ubuntu", sans-serif;
+  font-family: "TASA Explorer","Ubuntu", sans-serif;
 }
 
 /* Style inspiré de la doc Node.js : sobre, lisible, focus sur le contenu */
@@ -31,15 +31,25 @@ body {
   }
 }
 
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6 {
+  font-family: "TASA Explorer","Ubuntu", sans-serif;
+}
+
 /* Titres modernes */
 .mdx-content h1 {
   @apply text-3xl font-bold mt-8 mb-6 leading-tight;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); */
+  /* -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
   background-clip: text;
   position: relative;
   font-size: 1.75rem;
+  color: unset;
 }
 
 @media (min-width: 768px) {
@@ -53,7 +63,7 @@ body {
   position: absolute;
   bottom: -8px;
   left: 0;
-  width: 60px;
+  width: 100%;
   height: 3px;
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   border-radius: 2px;
@@ -87,7 +97,7 @@ body {
 
 .mdx-content h3 {
   @apply text-lg font-medium mt-6 mb-3;
-  color: #3b82f6;
+  /* color: #3b82f6; */
   font-weight: 600;
   font-size: 1.125rem;
 }
@@ -192,6 +202,7 @@ body {
 
 /* Code inline élégant */
 .mdx-content code {
+  font-family: "TASA Explorer","Ubuntu", sans-serif;
   @apply bg-slate-100 text-slate-800 px-2 py-1 rounded-md text-[14px];
   border: 1px solid #e2e8f0;
   font-weight: 500;

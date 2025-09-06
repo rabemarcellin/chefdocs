@@ -1,0 +1,86 @@
+
+### Content-Type: text/event-stream
+
+On va maintenant créer une endpoint api de type SSE
+
+Il faut définir les headers de l'endpoint SSE comme suit:
+- **Content-Type: text/event-stream**: Définir que c'est un api de type Server-Sent Events (SSE),
+c'est-à-dire que cette api va envoyer des réponses(événements) en temps réel.
+- **Connection: keep-alive**: Le flux de connexion reste ouvert.
+
+et aussi
+- **Cache-Control: no-cache**
+
+<hr/>
+<div style={{textAlign: "center"}}>**Exemple d'endpoint de type SSE avec Node.js**</div>
+<br/>
+
+```tsx
+import express from "express";
+
+const app = express();
+
+app.get("/stream", (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+
+
+  res.write(`event: start\n`);
+  res.write(`data: ${JSON.stringify({ message: "Je suis un réponse en temps réel" })}\n\n`);
+  
+
+  req.on("close", () => {
+    // fait quelque chose ici si tu le veux une fois la connexion fermée
+  });
+});
+```
+
+<hr/>
+<div style={{textAlign: "center"}}>**Exemple d'endpoint de type SSE avec FastAPI**</div>
+<br/>
+
+```python
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+import asyncio
+import json
+
+app = FastAPI()
+
+async def event_stream():
+    yield f"event: start\n"
+    yield f"data: {json.dumps({'message': 'Je suis une réponse en temps réel'})}\n\n"
+
+
+@app.get("/stream")
+async def stream():
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+```
+
+<div class="note">
+Les réponses de type:
+
+`event: qlq chose` 
+
+`data: qlq chose`
+
+ Si ça te dis quelque chose, c'est du SSE xD​
+
+ Et oui! 😁
+ </div>
+
+
+Les spécifications du SSE sont que:
+- les réponses soient toujours du texte `string`
+- on n'envoie pas les réponses par `res.json()` ou `res.send()` par exemple, sinon ça va fermer le flux de connexion.
+on utilise plutôt `res.write()` en javascript, ou `yield` en python.
+- tu peux intercepter le moment où la connexion est fermée, par exemple pour faire quelque chose par exemple. 
+Mais je pense, pas que la fermeture de la connexion seulement. Mais tu peux faire un truc de ce genre,
+je veux dire.
+
+<hr/>
+
+On peut maintenant appeler cette endpoint dans le frontend, elle va répondre maintenant en temps réel.
+donner les réponses petit à petit dans les formats `data: qlq chose`. Chose qu'on va savoir comment le 
+récuperer dans le front-end maintenant.

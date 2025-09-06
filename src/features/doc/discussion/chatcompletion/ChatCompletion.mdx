@@ -1,0 +1,54 @@
+
+
+### Envoie de la requête
+
+### Le format de réponses des chats, un peu different du quotidien
+
+<div class="note">
+Réponse en temps réel
+</div>
+
+### Récupération de la réponse
+
+### Parlons des chunks
+
+### Traitement des chunks
+
+### Affichage en completion
+
+### Code complet
+
+```tsx
+
+const token = Cookies.get("user");
+
+  const secureHeaders = {
+    "Content-Type": "application/json",
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
+
+  const response = await fetch(`${API_BASE_URL}/chat`, {
+    method: "POST",
+    headers: {
+      ...secureHeaders,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    return {
+      status: "error",
+      data: await response.json(),
+    };
+  }
+
+  const reader = response.body?.getReader();
+
+  if (!reader) {
+    throw new Error("No reader found");
+  }
+
+```
+
+### Petit bonus, gestion du completion et des states messages en react
+

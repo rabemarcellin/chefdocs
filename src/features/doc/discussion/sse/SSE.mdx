@@ -1,0 +1,71 @@
+import FigureSSEVsUsualImg from "./img/Figure_sse_vs_usual.png"
+import FigureFluxDeConnexionImg from "./img/Figure_flux_de_connexion.png"
+import FigureVSImg from "./img/Figure_vs.png"
+
+# Chating en général
+
+
+### Le protocole Server-Sent Events (SSE)
+
+SSE est similaire à WebSocket. 
+
+WebSocket, SSE, ce sont des moyens de communication, d'envoie et réception de réponse en temps réel.
+J'explique le **en temps réel**,
+quand tu veux savoir quelque chose au serveur, tu fais une requete(appel api).
+
+La plupart du temps on sait **quand** ou **à quelle moment** envoyer la réquete.
+
+*Mais quand il s'agit d'être notifié*
+
+Tu ne sauras jamais en avance quand appeler.
+par exemple tu ne sauras jamais si une personne a envoyer un message à toi car surement, 
+c'est pas toi qui a fait l'action donc tu ne peux pas anticiper le changement de tes states(comme on fait)
+
+**Quand être notifié** 
+
+Voilà le terme, 
+tu veux être notifié lors d'un changement au serveur, qui te concerne. Par exemple les liste de messages entre toi et un
+autre utilisateur, si des documents sont modifiés une collection que tu partages avec un autre utilisateur(chose qu'on 
+n'a pas encore anticiper), etc.
+
+**Tu veux être notifié quand quelque chose dans le backend te concerne**
+
+c'est-à-dire qu'au lieu que toi tu informes le serveur,
+tu veux que le serveur t'informe à son tour sans que tu fasses explicitement un appel api.
+
+Voilà le truc de temps réel,
+ce qui se passe c'est d'envoyer une requete(appel api) au serveur, et récevoir 
+
+<img src={FigureSSEVsUsualImg} alt="Figure SSE vs Usual" />
+
+### Flux de connexion, connexion ouvert, connexion fermé
+
+Il faut savoir qu'un appel api créer ce qu'on va appeler **flux de connexion**.
+Le flux de connexion un concept imaginaire de ma personne mais qu'on a employé pour expliquer le fonctionnement de SSE.
+
+Quand tu envoie une requete, tu créer la flux de connexion, en **ouvrant/établissant** la connexion.
+
+Pendant le lapse de temps ou le serveur tente de cherche la chose que tu lui demandes, c'est ça le flux en fait.
+ce genre de session, minime soit-il qui se créer à chaque demande/réponse.
+
+Quand la réponse est arrivée, tu ferme la connexion, en **fermant/terminant** la connexion.
+
+<img src={FigureFluxDeConnexionImg} alt="Figure Flux de Connexion" />
+
+### Requete normal vs WebSocket vs SSE
+
+- **En temps normal**, ce flux de connexion se fait rapidement. Tu envoie la requete, et tu reçois la réponse 
+temps que le serveur te répond, ensuite on ferme la connexion.
+
+**Le temps que se ferme la connexion**, c'est ce qui est en jeu.
+
+- **En Websocket**, tu établis tente d'établir la connexion. Et le serveur décides quand te répondre. 
+Mais la connexion reste ouverte, tu peux rédemander autre chose, ou recevoir davantage de retour aussi.
+
+- **En SSE**, c'est un peu le même pour le WebSocket, sauf que c'est unidirectionnel.
+En websocket, tu peux envoyer et réenvoie des messages comment tu le souhaites.
+En SSE, tu ne peux que recevoir et recevoir et recevoir des messages venant du serveur, sans pouvoir en envoyer.
+L'établissement(l'ouverture de flux) de la connexion se fait par ton appel api, après tu seras notifié
+et notifié par le serveur, être notifié est la seule chose que tu peux recevoir d'un protocole SSE.
+
+<img src={FigureVSImg} alt="Figure VS" />

@@ -14,6 +14,19 @@ export const technicFlowPath = "/discussion/technic-flow";
 export const codelineFlowTitle = "Dans la partie code";
 export const codelineFlowPath = "/discussion/codeline-flow";
 
+
+export const sseTitle = "Le protocole Server-Sent Events (SSE)";
+export const ssePath = "/discussion/sse";
+
+export const eventStreamTitle = "Event Stream";
+export const eventStreamPath = "/discussion/event-stream";
+
+export const eventSourceTitle = "Event Source";
+export const eventSourcePath = "/discussion/event-source";
+
+export const chatCompletionTitle = "Chating en général";
+export const chatCompletionPath = "/discussion/chat-completion";
+
 export const promptingTitle = "Prompting";
 export const promptingPath = "/discussion/prompting";
 

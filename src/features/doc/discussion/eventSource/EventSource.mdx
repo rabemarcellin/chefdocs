@@ -1,0 +1,153 @@
+### EventSource
+
+`EventSource` est un objet javascript qui nous permet d'intercepter plus facilement
+les réponses en streming d'un endpoint de type SSE.
+
+Tu peux voir les details de cette objet, sur [la documentation de MDN](https://developer.mozilla.org/fr/docs/Web/API/EventSource)
+
+<hr/>
+<div style={{textAlign: "center"}}>**Utilisation de EventSource pour catcher les réponses d'un endpoint SSE côté front**</div>
+<br/>
+```tsx
+const url = "http://localhost:3000/stream"; // url de l'endpoint SSE
+const source = new EventSource(url); 
+```
+
+<hr/>
+<div style={{textAlign: "center"}}>Genre tu peux savoir lorsque la connexion s'est ouverte avec `source.onopen`</div>
+<div style={{textAlign: "center"}}>**Faire quelque chose lorsque la connexion s'est ouverte**</div>
+<br/>
+```tsx
+source.onopen = () => {
+  console.log("Connexion ouverte");
+};
+```
+
+<hr/>
+<div style={{textAlign: "center"}}>**Quand c'est fermé avec `source.onclose`**</div>
+<br/>
+```tsx
+source.onclose = () => {
+  console.log("Connexion fermée");
+};
+```
+
+<hr/>
+<div style={{textAlign: "center"}}>**Intercepter les réponses envoyées petit à petit avec `source.onmessage`**</div>
+<br/>
+
+```tsx
+source.onmessage = (event) => {
+  console.log(event.data);
+  // ex: event.data = { message: "Je suis un réponse en temps réel" }
+  // sans le "data: ", juste l'objet JSON mais encore sous forme string, 
+  // il faut utiliser JSON.parse() pour avoir l'objet.
+}
+```
+
+Le réponse dans `event.data` ici mérite un peu d'attention.
+Car on pense qu'on a envoyer le réponse sous format 
+
+`"data: ${JSON.stringify({ message: "Je suis un réponse en temps réel" })}\n\n"`
+
+On pense surement que 
+```tsx
+event.data = "data: ${JSON.stringify({ message: "Je suis un réponse en temps réel" })}\n\n"
+```
+
+Mais non, l'EventSource va parser automatique les réponses du type `data: qlq chose` ou `event: qlq chose` et 
+va seulement mettre 
+
+`{ message: "Je suis un réponse en temps réel" }` 
+
+dans `event.data`, mais en tant que string car comme on a dit, le SSE ne renvoie que du texte c'est du texte.
+
+
+### Un faiblesse avec EventSource, c'est qu'on ne peut pas trop la réquete.
+
+J'explique, par exemple pour notre application. On va devoir en plus de passer la rêquete, il faut qu'on passe 
+le **Bearer token** aussi pour chaque requête car c'est un endpoint privé.
+
+Sauf qu'avec `EventSource`, on ne sait pas comment envoyer ou passer des headers HTTP dans la requete. Donc c'est mort.
+
+Heuresement qu'il y a la libraire [@microsoft/fetch-event-source](https://www.npmjs.com/package/@microsoft/fetch-event-source)
+qui résout cela. Le mode de fonctionnement est un peu le même que `EventSource`. Je te laisse voir comment
+ça marche. 🙃​
+
+<div className="tip">
+Je ne sais si je suis le seul à savoir dans myAuxilium avant, mais c'est seulement avec **le système de notification**
+qu'on utilisé **EventSource**.
+
+Alors que le système de chat en lui-même est un SSE aussi xD.
+
+Mais, puisque le code source qui marchait ne l'utilisait pas avant que j'intégre l'équipe. Donc on n'a plus pensé
+à changer l'autre système de gestion de stream qui marchait déjà.
+
+c'est-à-dire, **Gérer le stream(les réponses petit à petit)** manuellement. (En parsant le `data: ` et tout et tout)
+</div>
+
+<hr/>
+<div style={{textAlign: "center"}}>**Gestion de réponses SSE manuellement**</div>
+<br/>
+
+```tsx
+const handleStream = async (url) => {
+  const response = await fetch(url);
+  
+  if (!response.body) {
+    console.error("Le flux n'est pas disponible");
+    return;
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+
+    let parts = buffer.split("\n\n");
+    buffer = parts.pop();
+
+    for (let part of parts) {
+      const lines = part.split("\n");
+      let data = "";
+      let event = "rs_start";  // ou rs_end
+
+      // Ici, on parse les data du format data: qlq chose et event: qlq chose,
+      // comme on fait dans formatMessageAI()
+      for (let line of lines) {
+        if (line.startsWith("data:")) {
+          data += line.slice(5).trim() + "\n";
+        } else if (line.startsWith("event:")) {
+          event = line.slice(6).trim();
+        }
+      }
+
+      data = data.trim();
+      console.log(`Event: ${event}`, data);
+
+      // Si JSON
+      try {
+        const jsonData = JSON.parse(data);
+        console.log("JSON:", jsonData);
+      } catch {}
+    }
+  }
+}
+
+//
+handleStream("http://localhost:5000/stream");
+```
+
+Voilà! Et voilà aussi comment **myAuxilium* gère la réponse des agents. manuellement sans utiliser `EventSource`.
+Même si on peut l'utiliser, ou peut-être pas. Personne(moi XD) na jamais répenser dessous.
+
+Après, on a séparer la logique dans les fonctions `askAgentService()` et `formatMessageAI()`, `formatCompletionAI()`
+et plein d'autres fonctions pour le peaufiner selon les spécifications de notre projet.
+Mais la système de chat, dans son état simple et général c'est comme ça.
+
+🙂
