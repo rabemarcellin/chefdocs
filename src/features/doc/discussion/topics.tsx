@@ -95,8 +95,8 @@ export default [
     to: eventStreamPath,
     prev: ssePath,
     prevTitle: sseTitle,
-    next: chatCompletionPath,
-    nextTitle: chatCompletionTitle,
+    next: eventSourcePath,
+    nextTitle: eventSourceTitle,
     element: <EventStream />,
   },
   {
