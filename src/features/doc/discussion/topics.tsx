@@ -6,7 +6,7 @@ import CodelineFlow from "./codelineFlow/CodelineFlow.mdx";
 import DiscussionConcerns from "./concerns/DiscussionConcerns.mdx";
 import Prompting from "./prompting/Prompting.mdx";
 import CompletionLogic from "./completion/CompletionLogic.mdx";
-import ChatCompletion from "./chatCompletion/ChatCompletion.mdx";
+// import ChatCompletion from "./chatCompletion/ChatCompletion.mdx";
 import SSE from "./sse/SSE.mdx";
 import EventStream from "./eventStream/EventStream.mdx";
 import EventSource from "./eventSource/EventSource.mdx";
